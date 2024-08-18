@@ -23,7 +23,7 @@ import { authFormSchema } from "../lib/utils";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signIn, signUp,getLoggedInUser } from "../lib/actions/user.actions";
-// import PlaidLink from './PlaidLink';
+import PlaidLink from './PlaidLink';
 
 const AuthForm = ({ type }: { type: string }) => {
   const router = useRouter();
@@ -46,7 +46,20 @@ const AuthForm = ({ type }: { type: string }) => {
     try {
       if (type === "sign-up") {
        
-        const newUser = await signUp(data);
+        const userData = {
+          firstName: data.firstName!,
+          lastName: data.lastName!,
+          address1: data.address1!,
+          city: data.city!,
+          state: data.state!,
+          postalCode: data.postalCode!,
+          dateOfBirth: data.dateOfBirth!,
+          ssn: data.ssn!,
+          email: data.email,
+          password: data.password
+        }
+
+        const newUser = await signUp(userData);
         setUser(newUser);
       }
 
@@ -66,7 +79,7 @@ const AuthForm = ({ type }: { type: string }) => {
   };
 
   return (
-    <div>
+    
       <section className="auth-form">
         <header className="flex flex-col gap-5 md:gap-8">
           <Link href="/" className="cursor-pointer flex items-center gap-1">
@@ -97,7 +110,7 @@ const AuthForm = ({ type }: { type: string }) => {
         </header>
 
         {user ? (
-          <div className="flex flex-col gap-4">{/* Plaid  */}</div>
+          <div className="flex flex-col gap-4"><PlaidLink user={user} variant="primary"/></div>
         ) : (
           <>
             <Form {...form}>
@@ -214,7 +227,7 @@ const AuthForm = ({ type }: { type: string }) => {
           </>
         )}
       </section>
-    </div>
+   
   );
 };
 
